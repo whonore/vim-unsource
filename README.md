@@ -1,2 +1,17 @@
 # vim-unsource
-Undo the effects of sourcing a Vim script
+Attempt to undo the effects of sourcing a Vim script.
+
+```vim
+" Unsource a file
+call unsource#unsource('/etc/vimrc.local')
+" Unsource multiple files
+call unsource#unsource(['/etc/vimrc.local', '/etc/vimrc'])
+" Only undo 'set's and 'map's
+call unsource#unsource('/etc/vimrc.local', 'sm')
+```
+
+The second argument to `unsource#unsource` can be used to configure which
+commands are undone.
+By default the commands are `let`, `function`, `set`, `autocmd`, and `map`.
+To undo only a subset pass a string containing the first letter of the commands
+(e.g., `'lsa'`).
