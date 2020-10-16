@@ -1,5 +1,8 @@
 # vim-unsource
-Attempt to undo the effects of sourcing a Vim script.
+
+[![Build Status](https://travis-ci.com/whonore/vim-unsource.svg?branch=master)](https://travis-ci.com/whonore/vim-unsource)
+
+Undo a Vim script.
 
 ```vim
 " Unsource a file

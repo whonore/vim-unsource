@@ -1,0 +1,144 @@
+" TODO: let v (no scope), @v, $v, &v, unpack, const
+Given vim (let-eqs):
+  let v:v1 = 1
+  let g:g1 = 1
+  let g2 = 1
+  let s:s1 = 1
+  let b:b1 = 1
+  let w:w1 = 1
+  let t:w1 = 1
+  let l:l1 = 1
+
+Execute (let-eqs):
+  let unsource = ['unlet g:g1 b:b1 w:w1 t:w1']
+  AssertEqual unsource, unsource#unsource_lines(getline(1, '$'))
+
+Given vim (let-ops):
+  let x += 1
+  let x -= 1
+  let x *= 1
+  let x /= 1
+  let x .= 'a'
+  let x[1:2] = [1,2]
+
+Execute (let-ops):
+  let unsource = []
+  AssertEqual unsource, unsource#unsource_lines(getline(1, '$'))
+
+Given vim (function):
+  function! F1(x, y)
+    let l:l1 = 1
+    let l2 = 2
+  endfunction
+  function F2(...)
+  endfunction
+  func F3(...)
+  endfunc
+  func! s:f4()
+  endfunc
+
+Execute (function):
+  let unsource = ['delfunction F1', 'delfunction F2', 'delfunction F3']
+  AssertEqual unsource, unsource#unsource_lines(getline(1, '$'))
+
+" TODO: set? set! set& set+ set^ set- set<
+Given vim (set):
+  set expandtab
+  se sw=4 " With comment
+  setlocal smarttab
+  setl nomagic
+  setg list
+  setglobal magic
+
+Execute (set):
+  let unsource = ['set expandtab& sw&', 'setlocal smarttab& nomagic&', 'setglobal list& magic&']
+  AssertEqual unsource, unsource#unsource_lines(getline(1, '$'))
+
+" TODO: augroups
+Given vim (autocmds):
+  autocmd FileType c echo "c"
+  au FileType make echo "make"
+
+Execute (autocmds):
+  let unsource = ['autocmd! FileType c', 'autocmd! FileType make']
+  AssertEqual unsource, unsource#unsource_lines(getline(1, '$'))
+
+" TODO: <buffer>, other arguments, ignore map, map x
+Given vim (map):
+  map x y
+  nmap x y
+  vmap x y
+  vm x y
+  xmap x y
+  smap x y
+  omap x y
+  map! x y
+  imap x y
+  lmap x y
+  cmap x y
+  tmap x y
+  noremap x y
+  nnoremap x y
+  vnoremap x y
+  vn x y
+  xnoremap x y
+  snoremap x y
+  onoremap x y
+  noremap! x y
+  inoremap x y
+  lnoremap x y
+  cnoremap x y
+  tnoremap x y
+
+Execute (map):
+  let unsource = ['unmap x', 'nunmap x', 'vunmap x', 'vunmap x', 'xunmap x', 'sunmap x', 'ounmap x', 'unmap! x', 'iunmap x', 'lunmap x', 'cunmap x', 'tunmap x']
+  let unsource += unsource
+  AssertEqual unsource, unsource#unsource_lines(getline(1, '$'))
+
+Given vim (mix):
+  let g:g1 = 1
+  let g2 = 1
+  let s:s1 = 1
+  function! F1()
+    let l:l1 = 1
+    let l2 = 2
+  endfunction
+  set expandtab
+  se sw=4 " With comment
+  setlocal smarttab
+  " Comment
+  autocmd FileType c echo 'c'
+  map tmp echo 'tmp'
+  au FileType make echo 'make'
+
+Execute (mix):
+  let unsource = ['unlet g:g1', 'delfunction F1', 'set expandtab& sw&', 'setlocal smarttab&', 'autocmd! FileType c', 'autocmd! FileType make', 'unmap tmp']
+  AssertEqual unsource, unsource#unsource_lines(getline(1, '$'))
+
+Given vim (mix-let-set):
+  let g:g1 = 1
+  let g2 = 1
+  let s:s1 = 1
+  function! F1()
+    let l:l1 = 1
+    let l2 = 2
+  endfunction
+  set expandtab
+  se sw=4 " With comment
+  setlocal smarttab
+  " Comment
+  autocmd FileType c echo 'c'
+  map tmp echo 'tmp'
+  au FileType make echo 'make'
+
+Execute (mix-let-set):
+  let unsource = ['unlet g:g1', 'set expandtab& sw&', 'setlocal smarttab&']
+  AssertEqual unsource, unsource#unsource_lines(getline(1, '$'), 'ls')
+
+Execute (single-file):
+  let unsource = ['unlet g:g1', 'delfunction F1']
+  AssertEqual unsource, unsource#unsource('test1.vim', 'lf', 1)
+
+Execute (multi-file):
+  let unsource = ['unlet g:g1', 'delfunction F1', 'set expandtab& sw&', 'setlocal smarttab&']
+  AssertEqual unsource, unsource#unsource(['test1.vim', 'test2.vim'], 'lfs', 1)
