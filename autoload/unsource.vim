@@ -163,7 +163,9 @@ function! unsource#unsource(...) abort
   endfor
 
   if !l:dry_run
-    execute join(l:undos, '|')
+    for l:undo in l:undos
+      execute l:undo
+    endfor
   endif
   return l:undos
 endfunction
