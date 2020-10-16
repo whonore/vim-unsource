@@ -142,3 +142,11 @@ Execute (single-file):
 Execute (multi-file):
   let unsource = ['unlet g:g1', 'delfunction F1', 'set expandtab& sw&', 'setlocal smarttab&']
   AssertEqual unsource, unsource#unsource(['test1.vim', 'test2.vim'], 'lfs', 1)
+
+Execute (no-dry-run):
+  source test1.vim
+  source test2.vim
+  call unsource#unsource(['test1.vim', 'test2.vim'])
+  Assert !exists('g:g1')
+  Assert !exists('*F1')
+  AssertEqual 0, &expandtab
