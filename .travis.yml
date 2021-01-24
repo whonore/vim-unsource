@@ -1,9 +1,0 @@
-language: vim
-
-before_script:
-  - mkdir -p ~/.vim/bundle
-  - git clone https://github.com/junegunn/vader.vim.git ~/.vim/bundle/vader.vim
-
-script:
-  - cd tests
-  - ./runtest.sh
