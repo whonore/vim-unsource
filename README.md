@@ -1,6 +1,6 @@
 # vim-unsource
 
-[![Build Status](https://github.com/whonore/vim-unsource/workflows/tests/badge.svg?branch=master)](https://github.com/whonore/vim-unsource/actions?query=workflow%3Atests)
+[![Build Status](https://github.com/whonore/vim-unsource/workflows/Tests/badge.svg?branch=master)](https://github.com/whonore/vim-unsource/actions?query=workflow%3ATests)
 
 Undo a Vim script.
 
